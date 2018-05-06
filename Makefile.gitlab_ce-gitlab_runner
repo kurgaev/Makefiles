@@ -1,0 +1,30 @@
+gitlab-start:
+	docker run --detach --hostname mygitlab --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always --volume /srv/gitlab/config:/etc/gitlab:Z --volume /srv/gitlab/logs:/var/log/gitlab:Z --volume /srv/gitlab/data:/var/opt/gitlab:Z gitlab/gitlab-ce:latest
+
+gitlab-stop:
+	docker kill gitlab
+	docker rm gitlab
+
+gitlab-log:
+	docker logs -f gitlab
+
+runner-start:
+	docker run -d --name gitlab-runner --restart always -v /srv/gitlab-runner/config:/etc/gitlab-runner:Z -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest
+
+runner-stop:
+	docker kill gitlab-runner
+	docker rm gitlab-runner
+
+runner-log:
+	docker logs -f gitlab
+
+runner-register:
+	docker exec -it gitlab-runner gitlab-runner register
+
+portainter-start:
+	docker run -d -p 9000:9000 --name portainer -v /var/run/docker.sock:/var/run/docker.sock -v /srv/portainer_data:/data portainer/portainer
+
+portainer-stop:
+	docker kill portainer
+	docker rm portainer
+
