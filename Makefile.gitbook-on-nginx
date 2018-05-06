@@ -1,2 +1,6 @@
-start:
+serve:
+	#gitbook serve
 	docker run --name gitbook -v /home/john/GitBook/Library/Import/test/_book:/usr/share/nginx/html:ro -d -p 80:80 nginx
+
+build:
+	gitbook build
